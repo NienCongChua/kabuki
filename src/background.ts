@@ -1,3 +1,9 @@
+chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+  if (changeInfo.status == "complete") {
+    console.log("Loading completed");
+  }
+});
+
 chrome.webRequest.onCompleted.addListener(
   (detail) => {
     if (detail.url.search("answer") != -1) {
