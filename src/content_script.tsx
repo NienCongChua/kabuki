@@ -2,6 +2,7 @@ import { createWorker } from "tesseract.js";
 import { choice } from "./scripts/choice";
 import { vocabulary } from "./scripts/vocabulary";
 
+let dtk = "";
 const getTaskClassList = () => {
   return document.querySelector<HTMLElement>("#mbody")?.firstElementChild?.classList;
 };
@@ -10,25 +11,29 @@ const mo = new MutationObserver(onMutation);
 observe();
 
 function onMutation() {
-  const btnSubmit = document.querySelector<HTMLElement>("#submit564f801509");
-  if (btnSubmit && !btnSubmit.hasAttribute("disabled")) {
-    const classList = getTaskClassList();
-    const taskType = classList!.item(0)!.toString();
-    mo.disconnect();
-    console.log(taskType);
-    switch (taskType) {
-      case "dvocabulary": {
-        vocabulary(btnSubmit);
-        break;
-      }
-      case "dquestion": {
-        if (classList?.contains("choose-reading-choose-answer")) {
-          choice(btnSubmit);
+  let newDtk = document.querySelector<HTMLElement>("#mbody")!.getAttribute("dtk1")!.toString();
+  if (dtk != newDtk) {
+    dtk = newDtk;
+    const btnSubmit = document.querySelector<HTMLElement>(`button[dtk2="${dtk}"]`);
+    if (btnSubmit && !btnSubmit.hasAttribute("disabled")) {
+      const classList = getTaskClassList();
+      const taskType = classList!.item(0)!.toString();
+      mo.disconnect();
+      console.log(taskType);
+      switch (taskType) {
+        case "dvocabulary": {
+          vocabulary(btnSubmit);
+          break;
         }
-        break;
+        case "dquestion": {
+          if (classList?.contains("choose-reading-choose-answer")) {
+            choice(btnSubmit);
+          }
+          break;
+        }
+        default:
+          break;
       }
-      default:
-        break;
     }
     observe();
   }
