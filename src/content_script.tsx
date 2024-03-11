@@ -1,6 +1,7 @@
 import { createWorker } from "tesseract.js";
 import { choice } from "./scripts/choice";
 import { vocabulary } from "./scripts/vocabulary";
+import { wait } from "./utils/wait";
 
 let dtk = "";
 const getTaskClassList = () => {
@@ -28,7 +29,16 @@ function onMutation() {
         case "dquestion": {
           if (classList?.contains("choose-reading-choose-answer")) {
             choice(btnSubmit);
+          } else {
           }
+          break;
+        }
+        case "dcontent": {
+          wait(5);
+          btnSubmit.click();
+          break;
+        }
+        case "dmcq": {
           break;
         }
         default:
