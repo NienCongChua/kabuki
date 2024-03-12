@@ -1,4 +1,4 @@
-import { randomNumber } from "../utils/randomNumber";
+import { getRandomNumber } from "../utils/getRandomNumber";
 
 export const vocabulary = (btnSubmit: HTMLElement) => {
   let vocabPage = document.querySelector(".dvocabulary");
@@ -7,6 +7,6 @@ export const vocabulary = (btnSubmit: HTMLElement) => {
       element.setAttribute("muted", "muted");
       element.click();
     });
-    setTimeout(() => btnSubmit.click(), randomNumber(3, 5) * 1000);
+    setTimeout(() => btnSubmit.click(), getRandomNumber(3, 5) * 1000);
   }
 };

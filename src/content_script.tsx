@@ -1,7 +1,7 @@
-import { createWorker } from "tesseract.js";
-import { choice } from "./scripts/choice";
+import { imageChoice } from "./scripts/imageChoice";
 import { vocabulary } from "./scripts/vocabulary";
-import { wait } from "./utils/wait";
+import { wordChoice } from "./scripts/wordChoice";
+import { sleep } from "./utils/sleep";
 
 let dtk = "";
 const getTaskClassList = () => {
@@ -28,17 +28,23 @@ function onMutation() {
         }
         case "dquestion": {
           if (classList?.contains("choose-reading-choose-answer")) {
-            choice(btnSubmit);
+            wordChoice(btnSubmit);
           } else {
           }
           break;
         }
         case "dcontent": {
-          wait(5);
+          sleep(5);
           btnSubmit.click();
           break;
         }
         case "dmcq": {
+          imageChoice();
+          break;
+        }
+        case "dupload": {
+          sleep(5);
+          btnSubmit.click();
           break;
         }
         default:
@@ -56,12 +62,4 @@ function observe() {
   });
 }
 
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  const inputArr = document.querySelectorAll<HTMLElement>(".danw");
-  inputArr.forEach(async (inputElement) => {
-    const base64Img = inputElement.style.backgroundImage.slice(4, -1).replace(/"/g, "");
-    const worker = await createWorker("eng");
-    const ret = await worker.recognize(base64Img);
-    console.log(ret.data.text);
-  });
-});
+// chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {});
