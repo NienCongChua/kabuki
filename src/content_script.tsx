@@ -1,3 +1,4 @@
+import { filling } from "./scripts/filling";
 import { imageChoice } from "./scripts/imageChoice";
 import { vocabulary } from "./scripts/vocabulary";
 import { wordChoice } from "./scripts/wordChoice";
@@ -11,7 +12,7 @@ const getTaskClassList = () => {
 const mo = new MutationObserver(onMutation);
 observe();
 
-function onMutation() {
+async function onMutation() {
   let newDtk = document.querySelector<HTMLElement>("#mbody")!.getAttribute("dtk1")!.toString();
   if (dtk != newDtk) {
     dtk = newDtk;
@@ -28,8 +29,9 @@ function onMutation() {
         }
         case "dquestion": {
           if (classList?.contains("choose-reading-choose-answer")) {
-            wordChoice(btnSubmit);
+            await wordChoice(btnSubmit);
           } else {
+            await filling(btnSubmit);
           }
           break;
         }
@@ -39,11 +41,13 @@ function onMutation() {
           break;
         }
         case "dmcq": {
-          imageChoice();
+          document.querySelectorAll("audio").forEach((x) => (x.muted = true));
+          await imageChoice();
+          console.log("hi");
           break;
         }
         case "dupload": {
-          sleep(5);
+          await sleep(5);
           btnSubmit.click();
           break;
         }

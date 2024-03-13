@@ -21,7 +21,7 @@ export const wordChoice = async (btnSubmit: HTMLElement) => {
     await sleep(2);
     btnAnswer.click();
     correctAnswers.forEach((element) => (element.checked = true));
-    sleep(2);
+    await sleep(2);
     btnSubmit.click();
   }
 };
