@@ -1,4 +1,5 @@
 import { createWorker } from "tesseract.js";
+import { preprocessImage } from "../helpers/imageHelper";
 import { sleep } from "../utils/sleep";
 
 interface IAnswer {
@@ -21,14 +22,18 @@ export const filling = async (btnSubmit: HTMLElement) => {
     const correctAnswers: IAnswer[] = [];
     await allQues.forEach(async (input) => {
       const base64Img = input.style.backgroundImage.slice(4, -1).replace(/"/g, "");
+      const imgData = await preprocessImage(base64Img);
+      console.log(imgData);
       const worker = await createWorker("eng");
-      const ret = await worker.recognize(base64Img);
-      console.log(input);
-      console.log(ret.data.text);
-      correctAnswers.push({ input: input, ans: ret.data.text });
+      const {
+        data: { text },
+      } = await worker.recognize(imgData);
+      console.log(text);
+      correctAnswers.push({ input: input, ans: text.replace(/\|/g, "I") });
     });
     await sleep(2);
     btnAnswer.click();
+    await sleep(2);
     correctAnswers.forEach(({ input, ans }) => (input.value = ans));
     await sleep(2);
     btnSubmit.click();

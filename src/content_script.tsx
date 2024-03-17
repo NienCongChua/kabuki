@@ -36,19 +36,14 @@ async function onMutation() {
           break;
         }
         case "dcontent": {
-          sleep(5);
+          await sleep(30);
           btnSubmit.click();
           break;
         }
         case "dmcq": {
-          document.querySelectorAll("audio").forEach((x) => (x.muted = true));
+          // document.querySelectorAll("audio").forEach((x) => (x.muted = true));
           await imageChoice();
           console.log("hi");
-          break;
-        }
-        case "dupload": {
-          await sleep(5);
-          btnSubmit.click();
           break;
         }
         default:
