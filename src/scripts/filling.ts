@@ -30,6 +30,7 @@ export const filling = async (btnSubmit: HTMLElement) => {
       } = await worker.recognize(imgData);
       console.log(text);
       correctAnswers.push({ input: input, ans: text.replace(/\|/g, "I") });
+      console.log(correctAnswers);
     });
     await sleep(2);
     btnAnswer.click();

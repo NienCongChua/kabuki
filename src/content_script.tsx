@@ -1,10 +1,6 @@
-import { filling } from "./scripts/filling";
 import { imageChoice } from "./scripts/imageChoice";
-import { vocabulary } from "./scripts/vocabulary";
-import { wordChoice } from "./scripts/wordChoice";
-import { sleep } from "./utils/sleep";
 
-let dtk = "";
+let dtk: string;
 const getTaskClassList = () => {
   return document.querySelector<HTMLElement>("#mbody")?.firstElementChild?.classList;
 };
@@ -13,9 +9,9 @@ const mo = new MutationObserver(onMutation);
 observe();
 
 async function onMutation() {
-  let newDtk = document.querySelector<HTMLElement>("#mbody")!.getAttribute("dtk1")!.toString();
+  let newDtk = document.querySelector<HTMLElement>("#mbody")?.getAttribute("dtk1");
   if (dtk != newDtk) {
-    dtk = newDtk;
+    dtk = newDtk!;
     const btnSubmit = document.querySelector<HTMLElement>(`button[dtk2="${dtk}"]`);
     if (btnSubmit && !btnSubmit.hasAttribute("disabled")) {
       const classList = getTaskClassList();
@@ -23,25 +19,24 @@ async function onMutation() {
       mo.disconnect();
       console.log(taskType);
       switch (taskType) {
-        case "dvocabulary": {
-          vocabulary(btnSubmit);
-          break;
-        }
-        case "dquestion": {
-          if (classList?.contains("choose-reading-choose-answer")) {
-            await wordChoice(btnSubmit);
-          } else {
-            await filling(btnSubmit);
-          }
-          break;
-        }
-        case "dcontent": {
-          await sleep(30);
-          btnSubmit.click();
-          break;
-        }
+        // case "dvocabulary": {
+        //   vocabulary(btnSubmit);
+        //   break;
+        // }
+        // case "dquestion": {
+        //   if (classList?.contains("choose-reading-choose-answer")) {
+        //     await wordChoice(btnSubmit);
+        //   } else {
+        //     await filling(btnSubmit);
+        //   }
+        //   break;
+        // }
+        // case "dcontent": {
+        //   await sleep(30);
+        //   btnSubmit.click();
+        //   break;
+        // }
         case "dmcq": {
-          // document.querySelectorAll("audio").forEach((x) => (x.muted = true));
           await imageChoice();
           console.log("hi");
           break;
@@ -61,4 +56,6 @@ function observe() {
   });
 }
 
-// chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {});
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  console.log(request);
+});

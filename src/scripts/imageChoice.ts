@@ -1,21 +1,26 @@
 import { sleep } from "../utils/sleep";
+
 export const imageChoice = async () => {
-  let active: HTMLElement;
-  const numberOfQues = document.querySelectorAll<HTMLElement>(".dvoca").length;
-  const answeredQues = [];
-  while (answeredQues.length != numberOfQues) {
-    let currentActive = document.querySelector<HTMLElement>(".dvoca.active")!;
-    active = currentActive;
-    const allCurrentAns = active.querySelectorAll<HTMLElement>(".dans a");
-    for (let i = 0; i < allCurrentAns.length; i++) {
-      allCurrentAns[i].click();
-      await sleep(5);
-      if (allCurrentAns[i].style.borderColor == "red") {
-        continue;
+  let active: HTMLElement | null = document.querySelector<HTMLElement>(".dvoca.active");
+  let questionsArray = document.querySelectorAll(".dvoca");
+  let answeredNumber = 0;
+  while (questionsArray.length > answeredNumber) {
+    let answers = active?.querySelectorAll<HTMLElement>(".dtitle");
+    console.log(answers);
+    for (const x of answers!) {
+      x.dispatchEvent(
+        new MouseEvent("click", {
+          view: window,
+          bubbles: true,
+          cancelable: true,
+        }),
+      );
+      await sleep(3);
+      if (active != document.querySelector<HTMLElement>(".dvoca.active")) {
+        answeredNumber++;
+        active = document.querySelector<HTMLElement>(".dvoca.active");
+        break;
       }
-      break;
     }
-    answeredQues.push(active);
-    await sleep(5);
   }
 };

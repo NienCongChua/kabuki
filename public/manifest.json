@@ -25,7 +25,7 @@
     "service_worker": "js/background.js"
   },
 
-  "permissions": ["storage", "webRequest"],
+  "permissions": ["tabs", "storage", "webRequest"],
 
   "host_permissions": ["*://eop.edu.vn/study/task/*"]
 }
