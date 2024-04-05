@@ -1,3 +1,4 @@
+import { simulateMouseEvent } from "../utils/simulateMouseEvent";
 import { sleep } from "../utils/sleep";
 
 export const imageChoice = async () => {
@@ -8,13 +9,7 @@ export const imageChoice = async () => {
     let answers = active?.querySelectorAll<HTMLElement>(".dtitle");
     console.log(answers);
     for (const x of answers!) {
-      x.dispatchEvent(
-        new MouseEvent("click", {
-          view: window,
-          bubbles: true,
-          cancelable: true,
-        }),
-      );
+      simulateMouseEvent(x, "click");
       await sleep(3);
       if (active != document.querySelector<HTMLElement>(".dvoca.active")) {
         answeredNumber++;

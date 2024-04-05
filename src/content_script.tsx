@@ -1,4 +1,8 @@
+import { filling } from "./scripts/filling";
 import { imageChoice } from "./scripts/imageChoice";
+import { vocabulary } from "./scripts/vocabulary";
+import { wordChoice } from "./scripts/wordChoice";
+import { sleep } from "./utils/sleep";
 
 let dtk: string;
 const getTaskClassList = () => {
@@ -19,23 +23,23 @@ async function onMutation() {
       mo.disconnect();
       console.log(taskType);
       switch (taskType) {
-        // case "dvocabulary": {
-        //   vocabulary(btnSubmit);
-        //   break;
-        // }
-        // case "dquestion": {
-        //   if (classList?.contains("choose-reading-choose-answer")) {
-        //     await wordChoice(btnSubmit);
-        //   } else {
-        //     await filling(btnSubmit);
-        //   }
-        //   break;
-        // }
-        // case "dcontent": {
-        //   await sleep(30);
-        //   btnSubmit.click();
-        //   break;
-        // }
+        case "dvocabulary": {
+          vocabulary(btnSubmit);
+          break;
+        }
+        case "dquestion": {
+          if (classList?.contains("choose-reading-choose-answer")) {
+            await wordChoice(btnSubmit);
+          } else {
+            await filling(btnSubmit);
+          }
+          break;
+        }
+        case "dcontent": {
+          await sleep(30);
+          btnSubmit.click();
+          break;
+        }
         case "dmcq": {
           await imageChoice();
           console.log("hi");
