@@ -1,65 +1,31 @@
-import { filling } from "./scripts/filling";
-import { imageChoice } from "./scripts/imageChoice";
+import { chooseAnswer } from "./scripts/chooseAnswer";
+import { chooseWord } from "./scripts/chooseWord";
+import { fillBlank } from "./scripts/fillBlank";
 import { vocabulary } from "./scripts/vocabulary";
-import { wordChoice } from "./scripts/wordChoice";
-import { sleep } from "./utils/sleep";
 
-let dtk: string;
 const getTaskClassList = () => {
   return document.querySelector<HTMLElement>("#mbody")?.firstElementChild?.classList;
 };
 
-const mo = new MutationObserver(onMutation);
-observe();
-
-async function onMutation() {
-  let newDtk = document.querySelector<HTMLElement>("#mbody")?.getAttribute("dtk1");
-  if (dtk != newDtk) {
-    dtk = newDtk!;
-    const btnSubmit = document.querySelector<HTMLElement>(`button[dtk2="${dtk}"]`);
-    if (btnSubmit && !btnSubmit.hasAttribute("disabled")) {
-      const classList = getTaskClassList();
-      const taskType = classList!.item(0)!.toString();
-      mo.disconnect();
-      console.log(taskType);
-      switch (taskType) {
-        case "dvocabulary": {
-          vocabulary(btnSubmit);
-          break;
-        }
-        case "dquestion": {
-          if (classList?.contains("choose-reading-choose-answer")) {
-            await wordChoice(btnSubmit);
-          } else {
-            await filling(btnSubmit);
-          }
-          break;
-        }
-        case "dcontent": {
-          await sleep(30);
-          btnSubmit.click();
-          break;
-        }
-        case "dmcq": {
-          await imageChoice();
-          console.log("hi");
-          break;
-        }
-        default:
-          break;
-      }
-    }
-    observe();
+async function onMutation(dtk: string) {
+  const btnSubmit = document.querySelector<HTMLElement>(`button[dtk2="${dtk}"]`);
+  if (btnSubmit && !btnSubmit.hasAttribute("disabled")) {
+    const classList = getTaskClassList();
+    const taskType = classList!.item(1)!.toString();
+    console.log(taskType);
+    if (taskType == "default") vocabulary(btnSubmit);
+    if (taskType == "audio-write-word") console.log("Audio write word");
+    if (taskType == "fill-reading-word-blank" || taskType == "fill-listening-write-answer") fillBlank(btnSubmit);
+    if (taskType == "choose-listening-choose-answer" || taskType == "choose-reading-choose-answer")
+      chooseAnswer(btnSubmit);
+    if (taskType == "view-content") btnSubmit.click();
+    if (taskType == "upload-content") console.log("Upload");
+    if (taskType == "image-choose-word" || taskType == "audio-choose-word") chooseWord();
   }
 }
 
-function observe() {
-  mo.observe(document, {
-    subtree: true,
-    childList: true,
-  });
-}
-
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  console.log(request);
+  const dtk = request.id;
+  onMutation(dtk);
+  // if (document.querySelector<HTMLElement>("#mbody")?.getAttribute("dtk1") != dtk) window.location.reload();
 });

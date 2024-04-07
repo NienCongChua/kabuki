@@ -7,7 +7,7 @@ interface IAnswer {
   input: HTMLInputElement;
   ans: string;
 }
-export const filling = async (btnSubmit: HTMLElement) => {
+export const fillBlank = async (btnSubmit: HTMLElement) => {
   const allQues = document.querySelectorAll<HTMLInputElement>(".danw");
   allQues.forEach((element) => {
     element.value = "1324132";

@@ -1,7 +1,7 @@
 import { simulateMouseEvent } from "../utils/simulateMouseEvent";
 import { sleep } from "../utils/sleep";
 
-export const imageChoice = async () => {
+export const chooseWord = async () => {
   let active: HTMLElement | null = document.querySelector<HTMLElement>(".dvoca.active");
   let questionsArray = document.querySelectorAll(".dvoca");
   let answeredNumber = 0;
