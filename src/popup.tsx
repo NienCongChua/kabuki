@@ -26,7 +26,7 @@ const Popup = () => {
           },
           (msg) => {
             console.log("result message:", msg);
-          }
+          },
         );
       }
     });
@@ -38,10 +38,7 @@ const Popup = () => {
         <li>Current URL: {currentURL}</li>
         <li>Current Time: {new Date().toLocaleTimeString()}</li>
       </ul>
-      <button
-        onClick={() => setCount(count + 1)}
-        style={{ marginRight: "5px" }}
-      >
+      <button onClick={() => setCount(count + 1)} style={{ marginRight: "5px" }}>
         count up
       </button>
       <button onClick={changeBackground}>change background</button>
@@ -54,5 +51,5 @@ const root = createRoot(document.getElementById("root")!);
 root.render(
   <React.StrictMode>
     <Popup />
-  </React.StrictMode>
+  </React.StrictMode>,
 );
