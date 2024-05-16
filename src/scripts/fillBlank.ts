@@ -1,3 +1,4 @@
+import { LoremIpsum } from "lorem-ipsum";
 import { createWorker } from "tesseract.js";
 import { preprocessImage } from "../helpers/imageHelper";
 import { simulateMouseEvent } from "../utils/simulateMouseEvent";
@@ -8,9 +9,15 @@ interface IAnswer {
   ans: string;
 }
 export const fillBlank = async (btnSubmit: HTMLElement) => {
+  const lorem = new LoremIpsum({
+    wordsPerSentence: {
+      max: 16,
+      min: 4,
+    },
+  });
   const allQues = document.querySelectorAll<HTMLInputElement>(".danw");
   allQues.forEach((element) => {
-    element.value = "1324132";
+    element.value = lorem.generateSentences(1);
   });
   await sleep(3);
   simulateMouseEvent(btnSubmit, "click");
@@ -25,9 +32,12 @@ export const fillBlank = async (btnSubmit: HTMLElement) => {
       const base64Img = input.style.backgroundImage.slice(4, -1).replace(/"/g, "");
       const imgData = await preprocessImage(base64Img);
       const worker = await createWorker("eng");
-      const {
+      let {
         data: { text },
       } = await worker.recognize(imgData);
+      await worker.terminate();
+      text = text == "Cc\n" ? "c" : text;
+      text = text == "" ? "i" : text;
       correctAnswers.push({ input: input, ans: text.replace(/\|/g, "I") });
     }
     console.log(correctAnswers);

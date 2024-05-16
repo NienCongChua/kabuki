@@ -23,9 +23,8 @@ export const writeWord = async () => {
       l1: for (const x of trueVocab) {
         l2: for (const y of charDiv) {
           if (x == y.textContent) {
-            await sleep(1);
+            await sleep(0.5);
             simulateMouseEvent(y, "click");
-            console.log("clicked");
             charDiv = active!.querySelectorAll<HTMLElement>(".dstore li div");
             continue l1;
           }

@@ -16,8 +16,7 @@ export const chooseAnswer = async (btnSubmit: HTMLElement) => {
     const allRadios = document.querySelectorAll<HTMLInputElement>("input[type='radio']");
     const correctAnswers = new Set<HTMLInputElement>();
     for (const element of allRadios) {
-      element.checked == true;
-      correctAnswers.add(element);
+      element.checked == true && correctAnswers.add(element);
     }
     await sleep(2);
     btnAnswer.click();
