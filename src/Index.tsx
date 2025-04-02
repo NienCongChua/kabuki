@@ -1,24 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { createRoot } from "react-dom/client";
-import { Button, Switch, Typography, Box, Tab, Tabs } from "@mui/material";
-import './popup.css';
-import EopTool from './components/EopTool';
+import React from 'react';
+import { useState, useEffect } from "react";
+import EopTool from "./components/EopTool";
 import { motion } from "framer-motion";
-const Popup = () => {
-  const [currentURL, setCurrentURL] = useState<string>();
-  const [autoMode, setAutoMode] = useState<boolean>(false);
+import "./Index.css";
 
-  useEffect(() => {
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-      setCurrentURL(tabs[0].url);
-    });
-  }, []);
-
-  const handleToggle = () => {
-    setAutoMode(!autoMode);
-    chrome.runtime.sendMessage({ action: autoMode ? "stop" : "start" });
-  };
-
+const Index = () => {
   return (
     <div className="index-container">
       <div className="index-content">
@@ -36,7 +22,7 @@ const Popup = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3, duration: 0.6 }}
           >
-            Công cụ hoàn thành bài tập tự động
+            Công cụ hẹn giờ với chế độ tự động
           </motion.p>
           
           <motion.div
@@ -53,10 +39,4 @@ const Popup = () => {
   );
 };
 
-const root = createRoot(document.getElementById("root")!);
-
-root.render(
-  <React.StrictMode>
-    <Popup />
-  </React.StrictMode>,
-);
+export default Index;
