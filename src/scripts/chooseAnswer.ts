@@ -1,3 +1,4 @@
+import { simulateMouseEvent } from "../utils/simulateMouseEvent";
 import { sleep } from "../utils/sleep";
 
 export const chooseAnswer = async (btnSubmit: HTMLElement) => {
@@ -23,5 +24,11 @@ export const chooseAnswer = async (btnSubmit: HTMLElement) => {
     correctAnswers.forEach((element) => (element.checked = true));
     await sleep(2);
     btnSubmit.click();
+    // Tìm và click vào nút đóng của cửa sổ "Tôi không phải là robot"
+    const closeButton = document.querySelector<HTMLElement>(".fa.fa-close");
+    if (closeButton) {
+      simulateMouseEvent(closeButton, "click");
+      simulateMouseEvent(btnSubmit, "click");
+    }
   }
 };

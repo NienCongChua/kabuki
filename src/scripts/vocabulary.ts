@@ -6,13 +6,13 @@ export const vocabulary = async (btnSubmit: HTMLElement) => {
   const vocabElementArr = document.querySelectorAll<HTMLElement>("h4");
   let vocabArr: string[] = [];
   if (localStorage.getItem("vocab") != null) vocabArr = JSON.parse(localStorage.getItem("vocab")!);
-  console.log(vocabArr);
   vocabElementArr.forEach((v) => {
     v.querySelector<HTMLElement>(".daudio")?.click();
-    const trimVocab = v.textContent!.trim();
+    let trimVocab = v.textContent!.trim();
+    trimVocab = trimVocab.replace(/\s*\([^)]*\)$/, "");
+    console.log(trimVocab);
     if (vocabArr.indexOf(trimVocab) == -1) vocabArr.push(trimVocab);
   });
-  console.log("--------------------------------");
   console.log(vocabArr);
   localStorage.setItem("vocab", JSON.stringify(vocabArr));
   // sessionStorage.removeItem("vocab");

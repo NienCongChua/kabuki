@@ -47,5 +47,11 @@ export const fillBlank = async (btnSubmit: HTMLElement) => {
     correctAnswers.forEach(({ input, ans }) => (input.value = ans));
     await sleep(2);
     simulateMouseEvent(btnSubmit, "click");
+    // Tìm và click vào nút đóng của cửa sổ "Tôi không phải là robot"
+    const closeButton = document.querySelector<HTMLElement>(".fa.fa-close");
+    if (closeButton) {
+      simulateMouseEvent(closeButton, "click");
+      simulateMouseEvent(btnSubmit, "click");
+    }
   }
 };

@@ -12,7 +12,12 @@ const Popup = () => {
 
   return (
     <>
-      <div>Hello world</div>
+      <div>Hello world!</div>
+      <div>
+        <button onClick={() => {
+          chrome.runtime.sendMessage({ action: "start" });
+        }}>Start</button>
+      </div>
     </>
   );
 };
