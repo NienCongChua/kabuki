@@ -24,10 +24,13 @@ export const chooseAnswer = async (btnSubmit: HTMLElement) => {
     correctAnswers.forEach((element) => (element.checked = true));
     await sleep(2);
     btnSubmit.click();
+    await sleep(1);
     // Tìm và click vào nút đóng của cửa sổ "Tôi không phải là robot"
     const closeButton = document.querySelector<HTMLElement>(".fa.fa-close");
     if (closeButton) {
+      console.log("Found verify human");
       simulateMouseEvent(closeButton, "click");
+      console.log("Closed verify human");
       simulateMouseEvent(btnSubmit, "click");
     }
   }
