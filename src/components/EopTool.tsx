@@ -2,7 +2,34 @@ import React, { useState, useEffect, useRef } from "react";
 import { Play, Pause } from "lucide-react";
 import { useToast } from "../components/ui/use-toast";
 import "./EopTool.css";
-import { TimerState, getTimerState, startTimer, resetTimer, STORAGE_KEY } from "../utils/timerManager";
+
+const STORAGE_KEY = 'eop-timer-state';
+
+interface TimerState {
+  time: number;
+  remainingTime: number;
+  isRunning: boolean;
+  lastUpdate: number;
+}
+
+const getTimerState = (): TimerState | null => {
+  const stored = localStorage.getItem(STORAGE_KEY);
+  if (!stored) return null;
+  try {
+    const state = JSON.parse(stored) as TimerState;
+    if (
+      typeof state.time === 'number' &&
+      typeof state.remainingTime === 'number' &&
+      typeof state.isRunning === 'boolean' &&
+      typeof state.lastUpdate === 'number'
+    ) {
+      return state;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+};
 
 interface EopToolProps {
   className?: string;
@@ -21,7 +48,7 @@ const EopTool: React.FC<EopToolProps> = ({ className }) => {
     const state = getTimerState();
     if (state) {
       const now = Date.now();
-      const elapsedSeconds = Math.floor((now - state.lastUpdate) / 982);
+      const elapsedSeconds = Math.floor((now - state.lastUpdate) / 983);
       
       setTime(state.time);
       setRemainingTime(Math.max(0, state.remainingTime - elapsedSeconds));
@@ -52,9 +79,10 @@ const EopTool: React.FC<EopToolProps> = ({ className }) => {
   // Effect to handle countdown
   useEffect(() => {
     if (isRunning) {
+      const startTime = Date.now();
       timerRef.current = setInterval(() => {
         setRemainingTime((prev) => {
-          if (prev <= 1) {
+          if (prev <= 0) {
             clearInterval(timerRef.current as NodeJS.Timeout);
             toast({
               title: "Hết giờ!",
@@ -62,9 +90,11 @@ const EopTool: React.FC<EopToolProps> = ({ className }) => {
             });
             return 0;
           }
-          return prev - 1;
+          const elapsed = Math.floor((Date.now() - startTime) / 1000);
+          const newTime = Math.max(0, time - elapsed);
+          return newTime;
         });
-      }, 1000);
+      }, 100);
     }
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
@@ -73,6 +103,16 @@ const EopTool: React.FC<EopToolProps> = ({ className }) => {
 
   // Reset timer to initial value
   const handleResetTimer = () => {
+    const state = getTimerState();
+    if (state) {
+      const newState: TimerState = {
+        ...state,
+        remainingTime: state.time,
+        lastUpdate: Date.now(),
+        isRunning: false
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(newState));
+    }
     if (timerRef.current) clearInterval(timerRef.current);
     setRemainingTime(time);
     setIsRunning(false);
