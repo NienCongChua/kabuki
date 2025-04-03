@@ -11,7 +11,7 @@ export const writeWord = async () => {
   // Kiểm tra xem có từ vựng trong localStorage không
   const vocabFromStorage = localStorage.getItem("vocab");
   if (!vocabFromStorage) {
-    alert("Không có từ vựng nào trong từ điển");
+    alert("Không có từ vựng nào trong từ điển, Vui lòng học phần từ vựng trước!");
     return;
   }
 
@@ -23,26 +23,26 @@ export const writeWord = async () => {
     for (const x of charDiv) {
       charArr.push(x.textContent);
     }
-    let found: boolean[] = [];
+    let found = false;
     for (const vocab of vocabArr) {
       if (vocab.length == charArr.length && vocab.toUpperCase().split("").sort().join() == charArr.sort().join()) {
         trueVocab = vocab.toUpperCase().split("");
-        found.push(true);
-      } else {
-        found.push(false);
-      }
+        found = true;
+        break;
+      } 
     }
     
-    // if (!found) {
-    //   alert("Từ vựng không có trong từ điển, vui lòng tự click từ");
-    //   // Chờ người dùng click xong từ
-    //   while (active === document.querySelector<HTMLElement>(".dvoca.active")) {
-    //     await sleep(1);
-    //   }
-    //   answeredNumber++;
-    //   active = document.querySelector<HTMLElement>(".dvoca.active");
-    //   continue;
-    // }
+    console.log(`trueVocab: ${trueVocab}`);
+    if (!found) {
+      alert("Từ vựng không có trong từ điển, vui lòng tự click từ");
+      // Chờ người dùng click xong từ
+      while (active === document.querySelector<HTMLElement>(".dvoca.active")) {
+        await sleep(1);
+      }
+      answeredNumber++;
+      active = document.querySelector<HTMLElement>(".dvoca.active");
+      continue;
+    }
 
     while (charDiv.length > 0) {
       l1: for (const x of trueVocab) {
@@ -63,12 +63,12 @@ export const writeWord = async () => {
       active = document.querySelector<HTMLElement>(".dvoca.active");
     }
     await sleep(1);
-  // Tìm và click vào nút đóng của cửa sổ "Tôi không phải là robot"
-  const closeButton = document.querySelector<HTMLElement>(".fa.fa-close");
-  while (closeButton) {
-    simulateMouseEvent(closeButton, "click");
-    await sleep(2.2)
-  }
+    // Tìm và click vào nút đóng của cửa sổ "Tôi không phải là robot"
+    const closeButton = document.querySelector<HTMLElement>(".fa.fa-close");
+    while (closeButton) {
+      simulateMouseEvent(closeButton, "click");
+      await sleep(2.2);
+    }
   }
 };
 

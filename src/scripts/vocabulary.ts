@@ -24,10 +24,8 @@ export const vocabulary = async (btnSubmit: HTMLElement) => {
     v.querySelector<HTMLElement>(".daudio")?.click();
     let trimVocab = v.textContent!.trim();
     trimVocab = trimVocab.replace(/\s*\([^)]*\)$/, "");
-    console.log(trimVocab);
     if (vocabArr.indexOf(trimVocab) == -1) vocabArr.push(trimVocab);
   });
-  console.log(vocabArr);
   localStorage.setItem("vocab", JSON.stringify(vocabArr));
   // sessionStorage.removeItem("vocab");
   // document.querySelectorAll<HTMLElement>(".daudio").forEach((element) => {
