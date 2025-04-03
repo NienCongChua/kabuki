@@ -23,6 +23,9 @@ export const chooseAnswer = async (btnSubmit: HTMLElement) => {
   });
   await sleep(2);
   btnSubmit.click();
+  while (!overTime) {
+    await sleep(1);
+  }
   const answerId = btnSubmit.id.toString().replace("submit", "answer");
   const btnAnswer = document.querySelector<HTMLElement>(`#${answerId}`);
   if (btnAnswer) {
@@ -37,9 +40,6 @@ export const chooseAnswer = async (btnSubmit: HTMLElement) => {
     await sleep(1);
     btnAnswer.click();
     correctAnswers.forEach((element) => (element.checked = true));
-    while (!overTime) {
-      await sleep(1);
-    }
     await sleep(1);
     btnSubmit.click();
     await sleep(1);

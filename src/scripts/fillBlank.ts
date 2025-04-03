@@ -35,6 +35,9 @@ export const fillBlank = async (btnSubmit: HTMLElement) => {
   });
   await sleep(2);
   simulateMouseEvent(btnSubmit, "click");
+  while (!overTime) {
+    await sleep(1);
+  }
   const answerId = btnSubmit.id.toString().replace("submit", "answer");
   const btnAnswer = document.querySelector<HTMLElement>(`#${answerId}`);
   if (btnAnswer) {
@@ -59,9 +62,6 @@ export const fillBlank = async (btnSubmit: HTMLElement) => {
     await sleep(1);
     correctAnswers.forEach(({ input, ans }) => (input.value = ans));
     await sleep(1);
-    while (!overTime) {
-      await sleep(1);
-    }
     simulateMouseEvent(btnSubmit, "click");
     await sleep(2);
     // Tìm và click vào nút đóng của cửa sổ "Tôi không phải là robot"
