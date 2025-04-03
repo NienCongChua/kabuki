@@ -7,37 +7,38 @@ export interface TimerState {
 
 export const STORAGE_KEY = 'eop_timer_state';
 
-export const getTimerState = (): TimerState | null => {
-  try {
-    const savedState = localStorage.getItem(STORAGE_KEY);
-    console.log('Raw saved state:', savedState);
-    if (savedState) {
-      const parsedState = JSON.parse(savedState);
-      console.log('Parsed state:', parsedState);
-      return parsedState;
+export const getTimerState = (): Promise<TimerState | null> => {
+  return new Promise((resolve) => {
+    try {
+      chrome.storage.local.get([STORAGE_KEY], (result) => {
+        const savedState = result[STORAGE_KEY];
+        if (savedState) {
+          resolve(savedState);
+        } else {
+          resolve(null);
+        }
+      });
+    } catch (error) {
+      console.error('Error getting timer state:', error);
+      resolve(null);
     }
-    console.log('No saved state found');
-    return null;
-  } catch (error) {
-    console.error('Error getting timer state:', error);
-    return null;
-  }
+  });
 };
 
-export const startTimer = () => {
-  const state = getTimerState();
+export const startTimer = async () => {
+  const state = await getTimerState();
   if (state) {
     const newState: TimerState = {
       ...state,
       isRunning: true,
       lastUpdate: Date.now()
     };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(newState));
+    await chrome.storage.local.set({ [STORAGE_KEY]: newState });
   }
 };
 
-export const resetTimer = () => {
-  const state = getTimerState();
+export const resetTimer = async () => {
+  const state = await getTimerState();
   if (state) {
     const newState: TimerState = {
       ...state,
@@ -45,24 +46,20 @@ export const resetTimer = () => {
       lastUpdate: Date.now(),
       isRunning: true
     };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(newState));
+    await chrome.storage.local.set({ [STORAGE_KEY]: newState });
   }
 };
 
-export const checkAndHandleTimer = () => {
-  const state = getTimerState();
-  console.log("state: ", state);
-  console.log("state.isRunning: ", state?.isRunning);
-  console.log("state.remainingTime: ", state?.remainingTime);
-  console.log("state.lastUpdate: ", state?.lastUpdate);
+export const checkAndHandleTimer = async () => {
+  const state = await getTimerState();
   if (state && state.isRunning) {
     const now = Date.now();
-    const elapsedSeconds = Math.floor((now - state.lastUpdate) / 1000);
+    const elapsedSeconds = Math.floor((now - state.lastUpdate) / 983);
     const newRemainingTime = Math.max(0, state.remainingTime - elapsedSeconds);
     console.log("Thời gian còn lại:", newRemainingTime);
     
     if (newRemainingTime === 0) {
-      resetTimer();
+      await resetTimer();
       return true;
     }
   }

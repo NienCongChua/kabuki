@@ -3,7 +3,7 @@
 
   "name": "Kabuki",
   "description": "Automatically doing eop units with a little bit of extra effort :v",
-  "version": "1.0",
+  "version": "2.0.1",
   "icons": {
     "128": "icon.png"
   },
@@ -27,7 +27,7 @@
     "service_worker": "js/background.js"
   },
 
-  "permissions": ["tabs", "storage", "webRequest"],
+  "permissions": ["tabs", "storage", "webRequest", "alarms"],
 
   "host_permissions": ["*://eop.edu.vn/study/task/*"]
 }

@@ -16,37 +16,43 @@ const EopTool: React.FC<EopToolProps> = ({ className }) => {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Khôi phục trạng thái từ localStorage khi component mount
+  // Khôi phục trạng thái từ chrome storage khi component mount
   useEffect(() => {
-    const state = getTimerState();
-    if (state) {
-      const now = Date.now();
-      const elapsedSeconds = Math.floor((now - state.lastUpdate) / 982);
-      
-      setTime(state.time);
-      setRemainingTime(Math.max(0, state.remainingTime - elapsedSeconds));
-      setIsRunning(state.isRunning);
-    } else {
-      // Khởi tạo state mặc định nếu chưa có
-      const defaultState: TimerState = {
-        time: 30,
-        remainingTime: 30,
-        isRunning: false,
-        lastUpdate: Date.now()
-      };
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(defaultState));
-    }
+    const loadState = async () => {
+      const state = await getTimerState();
+      if (state) {
+        const now = Date.now();
+        const elapsedSeconds = Math.floor((now - state.lastUpdate) / 982);
+        
+        setTime(state.time);
+        setRemainingTime(Math.max(0, state.remainingTime - elapsedSeconds));
+        setIsRunning(state.isRunning);
+      } else {
+        // Khởi tạo state mặc định nếu chưa có
+        const defaultState: TimerState = {
+          time: 30,
+          remainingTime: 30,
+          isRunning: false,
+          lastUpdate: Date.now()
+        };
+        await chrome.storage.local.set({ [STORAGE_KEY]: defaultState });
+      }
+    };
+    loadState();
   }, []);
 
-  // Lưu trạng thái vào localStorage khi có thay đổi
+  // Lưu trạng thái vào chrome storage khi có thay đổi
   useEffect(() => {
-    const state: TimerState = {
-      time,
-      remainingTime,
-      isRunning,
-      lastUpdate: Date.now()
+    const saveState = async () => {
+      const state: TimerState = {
+        time,
+        remainingTime,
+        isRunning,
+        lastUpdate: Date.now()
+      };
+      await chrome.storage.local.set({ [STORAGE_KEY]: state });
     };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    saveState();
   }, [time, remainingTime, isRunning]);
 
   // Effect to handle countdown

@@ -1,7 +1,9 @@
 import { simulateMouseEvent } from "../utils/simulateMouseEvent";
 import { sleep } from "../utils/sleep";
+import { resetTimer } from "../utils/timerManager";
 
 export const writeWord = async () => {
+  resetTimer();
   let active: HTMLElement | null = document.querySelector<HTMLElement>(".dvoca.active");
   let questionsArray = document.querySelectorAll(".dvoca");
   let answeredNumber = 0;
@@ -42,7 +44,6 @@ export const writeWord = async () => {
     //   continue;
     // }
 
-    console.log(`trueVocab: ${trueVocab}`);
     while (charDiv.length > 0) {
       l1: for (const x of trueVocab) {
         l2: for (const y of charDiv) {
@@ -61,6 +62,13 @@ export const writeWord = async () => {
       answeredNumber++;
       active = document.querySelector<HTMLElement>(".dvoca.active");
     }
+    await sleep(1);
+  // Tìm và click vào nút đóng của cửa sổ "Tôi không phải là robot"
+  const closeButton = document.querySelector<HTMLElement>(".fa.fa-close");
+  while (closeButton) {
+    simulateMouseEvent(closeButton, "click");
+    await sleep(1.2)
+  }
   }
 };
 
