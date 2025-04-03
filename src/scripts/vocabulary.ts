@@ -43,6 +43,7 @@ export const vocabulary = async (btnSubmit: HTMLElement) => {
   // Tìm và click vào nút đóng của cửa sổ "Tôi không phải là robot"
   const closeButton = document.querySelector<HTMLElement>(".fa.fa-close");
   while (closeButton) {
+    await sleep(1);
     simulateMouseEvent(closeButton, "click");
     await sleep(2.2);
     simulateMouseEvent(btnSubmit, "click");
