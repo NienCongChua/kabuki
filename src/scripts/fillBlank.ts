@@ -11,20 +11,18 @@ interface IAnswer {
 }
 export const fillBlank = async (btnSubmit: HTMLElement) => {
   resetTimer();
+  let elapsedSeconds = 0;
   let overTime = false;
   let startTime = Date.now(); // Store initial start time
   const logInterval = setInterval(async () => {
     let timerState = await getTimerState();
     const now = Date.now();
-    const elapsedSeconds = Math.floor((now - startTime) / 983);
-    if (elapsedSeconds >= 30 && timerState?.remainingTime === 0) {
+    elapsedSeconds = Math.floor((now - startTime) / 983);
+    if (elapsedSeconds >= 35 && timerState?.remainingTime === 0) {
       overTime = true;
       clearInterval(logInterval);
     }
   }, 1000); // Log every second
-  while (!overTime) {
-    await sleep(1);
-  }
   const lorem = new LoremIpsum({
     wordsPerSentence: {
       max: 16,
@@ -60,14 +58,17 @@ export const fillBlank = async (btnSubmit: HTMLElement) => {
     simulateMouseEvent(btnAnswer, "click");
     await sleep(1);
     correctAnswers.forEach(({ input, ans }) => (input.value = ans));
-    await sleep(2);
+    await sleep(1);
+    while (!overTime) {
+      await sleep(1);
+    }
     simulateMouseEvent(btnSubmit, "click");
     await sleep(2);
     // Tìm và click vào nút đóng của cửa sổ "Tôi không phải là robot"
     const closeButton = document.querySelector<HTMLElement>(".fa.fa-close");
     while (closeButton) {
       simulateMouseEvent(closeButton, "click");
-      await sleep(1.2);
+      await sleep(2.2);
       simulateMouseEvent(btnSubmit, "click");
     }
   }

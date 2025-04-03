@@ -5,20 +5,18 @@ import { resetTimer, getTimerState } from "../utils/timerManager";
 export const chooseAnswer = async (btnSubmit: HTMLElement) => {
   // Set up continuous timer state logging
   resetTimer();
+  let elapsedSeconds = 0;
   let overTime = false;
   let startTime = Date.now(); // Store initial start time
   const logInterval = setInterval(async () => {
     let timerState = await getTimerState();
     const now = Date.now();
-    const elapsedSeconds = Math.floor((now - startTime) / 983);
-    if (elapsedSeconds >= 30 && timerState?.remainingTime === 0) {
+    elapsedSeconds = Math.floor((now - startTime) / 983);
+    if (elapsedSeconds >= 35 && timerState?.remainingTime === 0) {
       overTime = true;
       clearInterval(logInterval);
     }
   }, 1000); // Log every second
-  while (!overTime) {
-    await sleep(1);
-  }
   const allQues = document.querySelectorAll<HTMLElement>(".ques");
   allQues.forEach((element) => {
     element.querySelectorAll<HTMLInputElement>("input")[0].checked = true;
@@ -39,6 +37,9 @@ export const chooseAnswer = async (btnSubmit: HTMLElement) => {
     await sleep(1);
     btnAnswer.click();
     correctAnswers.forEach((element) => (element.checked = true));
+    while (!overTime) {
+      await sleep(1);
+    }
     await sleep(1);
     btnSubmit.click();
     await sleep(1);
@@ -46,7 +47,7 @@ export const chooseAnswer = async (btnSubmit: HTMLElement) => {
     const closeButton = document.querySelector<HTMLElement>(".fa.fa-close");
     while (closeButton) {
       simulateMouseEvent(closeButton, "click");
-      await sleep(1.2);
+      await sleep(2.2);
       simulateMouseEvent(btnSubmit, "click");
     }
   }

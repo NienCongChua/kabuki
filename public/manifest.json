@@ -3,7 +3,7 @@
 
   "name": "Kabuki",
   "description": "Automatically doing eop units with a little bit of extra effort :v",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "icons": {
     "128": "icon.png"
   },

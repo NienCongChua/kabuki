@@ -67,7 +67,7 @@ export const writeWord = async () => {
   const closeButton = document.querySelector<HTMLElement>(".fa.fa-close");
   while (closeButton) {
     simulateMouseEvent(closeButton, "click");
-    await sleep(1.2)
+    await sleep(2.2)
   }
   }
 };
