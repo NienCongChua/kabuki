@@ -21,7 +21,7 @@ const EopTool: React.FC<EopToolProps> = ({ className }) => {
     const state = getTimerState();
     if (state) {
       const now = Date.now();
-      const elapsedSeconds = Math.floor((now - state.lastUpdate) / 1000);
+      const elapsedSeconds = Math.floor((now - state.lastUpdate) / 982);
       
       setTime(state.time);
       setRemainingTime(Math.max(0, state.remainingTime - elapsedSeconds));
