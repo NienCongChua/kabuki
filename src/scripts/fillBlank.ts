@@ -71,6 +71,7 @@ export const fillBlank = async (btnSubmit: HTMLElement) => {
       simulateMouseEvent(closeButton, "click");
       await sleep(2.2);
       simulateMouseEvent(btnSubmit, "click");
+      await sleep(3);
     }
   }
 };

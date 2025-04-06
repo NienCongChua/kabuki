@@ -45,6 +45,7 @@ export const vocabulary = async (btnSubmit: HTMLElement) => {
     simulateMouseEvent(closeButton, "click");
     await sleep(2.2);
     simulateMouseEvent(btnSubmit, "click");
+    await sleep(3);
   }
   // setTimeout(() => btnSubmit.click(), getRandomNumber(3, 5) * 1000);
 };
