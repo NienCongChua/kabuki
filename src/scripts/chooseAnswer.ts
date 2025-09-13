@@ -1,6 +1,17 @@
 import { simulateMouseEvent } from "../utils/simulateMouseEvent";
 import { sleep } from "../utils/sleep";
 
+// Tính thời gian chờ dựa trên thời gian load trang
+function calculateWaitTime(): number {
+  // Sử dụng performance.now() thay vì deprecated timing API
+  const pageLoadTime = performance.now() / 1000;
+  if (pageLoadTime >= 35) {
+    return 3; // Nếu đã load >= 35s, chỉ chờ 3s
+  } else {
+    return Math.max(3, 35 - pageLoadTime); // Chờ đủ 35s tổng cộng, tối thiểu 3s
+  }
+}
+
 export const chooseAnswer = async (btnSubmit: HTMLElement) => {
   const allQues = document.querySelectorAll<HTMLElement>(".ques");
   allQues.forEach((element) => {
@@ -11,7 +22,8 @@ export const chooseAnswer = async (btnSubmit: HTMLElement) => {
   const answerId = btnSubmit.id.toString().replace("submit", "answer");
   const btnAnswer = document.querySelector<HTMLElement>(`#${answerId}`);
   if (btnAnswer) {
-    await sleep(35);
+    const waitTime = calculateWaitTime();
+    await sleep(waitTime);
     btnAnswer.click();
     await sleep(2);
     const allRadios = document.querySelectorAll<HTMLInputElement>("input[type='radio']");

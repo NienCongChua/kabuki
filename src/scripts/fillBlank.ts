@@ -4,6 +4,17 @@ import { preprocessImage } from "../helpers/imageHelper";
 import { simulateMouseEvent } from "../utils/simulateMouseEvent";
 import { sleep } from "../utils/sleep";
 
+// Tính thời gian chờ dựa trên thời gian load trang
+function calculateWaitTime(): number {
+  // Sử dụng performance.now() để tính thời gian từ khi trang bắt đầu load
+  const pageLoadTime = performance.now() / 1000;
+  if (pageLoadTime >= 35) {
+    return 3; // Nếu đã load >= 35s, chỉ chờ 3s
+  } else {
+    return Math.max(3, 38 - pageLoadTime); // Chờ đủ 35s tổng cộng, tối thiểu 3s
+  }
+}
+
 interface IAnswer {
   input: HTMLInputElement;
   ans: string;
@@ -24,7 +35,8 @@ export const fillBlank = async (btnSubmit: HTMLElement) => {
   const answerId = btnSubmit.id.toString().replace("submit", "answer");
   const btnAnswer = document.querySelector<HTMLElement>(`#${answerId}`);
   if (btnAnswer) {
-    await sleep(35);
+    const waitTime = calculateWaitTime();
+    await sleep(waitTime);
     simulateMouseEvent(btnAnswer, "click");
     await sleep(2);
     const correctAnswers: IAnswer[] = [];
