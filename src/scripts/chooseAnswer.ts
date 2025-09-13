@@ -8,7 +8,7 @@ function calculateWaitTime(): number {
   if (pageLoadTime >= 35) {
     return 3; // Nếu đã load >= 35s, chỉ chờ 3s
   } else {
-    return Math.max(3, 35 - pageLoadTime); // Chờ đủ 35s tổng cộng, tối thiểu 3s
+    return Math.max(3, 42 - pageLoadTime); // Chờ đủ 35s tổng cộng, tối thiểu 3s
   }
 }
 
