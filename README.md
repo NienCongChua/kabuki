@@ -1,70 +1,92 @@
-# Chrome Extension TypeScript Starter
+# EOP Easier Extension
 
-![build](https://github.com/chibat/chrome-extension-typescript-starter/workflows/build/badge.svg)
+Extension Chrome tự động giải bài tập trên EOP với tính năng timer có thể tùy chỉnh.
 
-Chrome Extension, TypeScript and Visual Studio Code
+## Tính năng
+
+- ✅ Tự động giải các loại bài tập EOP
+- ⏱️ Timer có thể tùy chỉnh độ trễ
+- 🎯 Giao diện đẹp với animation
+- 🔧 Xử lý lỗi connection tốt hơn
+
+## Cách sử dụng
+
+1. **Cài đặt Extension:**
+   - Build extension: `npm run build`
+   - Mở Chrome Extensions (chrome://extensions/)
+   - Bật Developer mode
+   - Click "Load unpacked" và chọn thư mục `dist`
+
+2. **Sử dụng Timer:**
+   - Click vào icon extension trên toolbar
+   - Nhập thời gian delay (giây) trong ô "Độ trễ"
+   - Click nút Play để bắt đầu timer
+   - Click nút Pause để dừng timer
+
+3. **Tự động giải bài:**
+   - Truy cập trang bài tập EOP
+   - Extension sẽ tự động phát hiện và giải bài
+   - Nếu timer đang chạy, sẽ đợi theo thời gian đã set
+
+## Các lỗi đã sửa
+
+### 1. Lỗi "Could not establish connection"
+- **Nguyên nhân:** Background script gửi message đến content script khi chưa sẵn sàng
+- **Giải pháp:** Thêm error handling và callback để xử lý lỗi connection
+
+### 2. Timer không hoạt động
+- **Nguyên nhân:** Popup và background script không giao tiếp được
+- **Giải pháp:**
+  - Thêm message handling trong background script
+  - Kết nối EopTool component với background script
+  - Đồng bộ timer state giữa popup và content script
+
+## Cấu trúc code
+
+```
+src/
+├── background.ts          # Service worker xử lý timer state
+├── content_script.tsx     # Script chạy trên trang EOP
+├── popup.tsx             # Popup chính
+├── components/
+│   └── EopTool.tsx       # Component timer UI
+└── scripts/              # Các script giải bài tập
+    ├── chooseAnswer.ts
+    ├── chooseWord.ts
+    ├── fillBlank.ts
+    ├── vocabulary.ts
+    └── writeWord.ts
+```
 
 ## Prerequisites
 
 * [node + npm](https://nodejs.org/) (Current Version)
 
-## Option
+## Development
 
-* [Visual Studio Code](https://code.visualstudio.com/)
-
-## Includes the following
-
-* TypeScript
-* Webpack
-* React
-* Jest
-* Example Code
-    * Chrome Storage
-    * Options Version 2
-    * content script
-    * count up badge number
-    * background
-
-## Project Structure
-
-* src/typescript: TypeScript source files
-* src/assets: static files
-* dist: Chrome Extension directory
-* dist/js: Generated JavaScript files
-
-## Setup
-
-```
+```bash
+# Install dependencies
 npm install
-```
 
-## Import as Visual Studio Code project
+# Build for development
+npm run dev
 
-...
-
-## Build
-
-```
+# Build for production
 npm run build
-```
 
-## Build in watch mode
+# Clean build
+npm run clean
 
-### terminal
-
-```
+# Watch mode
 npm run watch
+
+# Test
+npm run test
 ```
-
-### Visual Studio Code
-
-Run watch mode.
-
-type `Ctrl + Shift + B`
 
 ## Load extension to chrome
 
-Load `dist` directory
-
-## Test
-`npx jest` or `npm run test`
+1. Mở Chrome và truy cập `chrome://extensions/`
+2. Bật "Developer mode" ở góc trên bên phải
+3. Click "Load unpacked" và chọn thư mục `dist`
+4. Extension sẽ xuất hiện trong danh sách và sẵn sàng sử dụng

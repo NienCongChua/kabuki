@@ -90,6 +90,83 @@
   position: relative;
 }
 
+/* Timer Circle Styles */
+.timer-circle-container {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 16px;
+}
+
+.timer-circle {
+  transform: rotate(-90deg);
+  transition: all 0.3s ease;
+}
+
+.timer-circle circle {
+  transition: stroke-dashoffset 0.1s ease;
+}
+
+.timer-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.timer-number {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #6b7280;
+  transition: all 0.3s ease;
+  line-height: 1;
+}
+
+.timer-number.active {
+  color: #3b82f6;
+  animation: numberPulse 1s infinite alternate;
+}
+
+@keyframes numberPulse {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.1);
+  }
+}
+
+.timer-unit {
+  font-size: 0.875rem;
+  color: #9ca3af;
+  font-weight: 500;
+  margin-top: -4px;
+}
+
+.eop-status-text {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #6b7280;
+  transition: all 0.3s ease;
+}
+
+.eop-status-text.active {
+  color: #3b82f6;
+  animation: textGlow 2s infinite alternate;
+}
+
+@keyframes textGlow {
+  0% {
+    text-shadow: 0 0 5px rgba(59, 130, 246, 0.3);
+  }
+  100% {
+    text-shadow: 0 0 15px rgba(59, 130, 246, 0.6);
+  }
+}
+
 .eop-timer:before {
   content: "";
   position: absolute;

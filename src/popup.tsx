@@ -1,23 +1,47 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { createRoot } from "react-dom/client";
-import { Button, Switch, Typography, Box, Tab, Tabs } from "@mui/material";
 import './popup.css';
 import EopTool from './components/EopTool';
 import { motion } from "framer-motion";
+
+// Error boundary để xử lý lỗi Canvas2D
+class ErrorBoundary extends React.Component<
+  { children: React.ReactNode },
+  { hasError: boolean }
+> {
+  constructor(props: { children: React.ReactNode }) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error) {
+    // Bỏ qua lỗi Canvas2D không quan trọng
+    if (error.message.includes('Canvas2D') || error.message.includes('getImageData')) {
+      return;
+    }
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="error-fallback">
+          <h2>Đã xảy ra lỗi</h2>
+          <button onClick={() => this.setState({ hasError: false })}>
+            Thử lại
+          </button>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
+
 const Popup = () => {
-  const [currentURL, setCurrentURL] = useState<string>();
-  const [autoMode, setAutoMode] = useState<boolean>(false);
-
-  useEffect(() => {
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-      setCurrentURL(tabs[0].url);
-    });
-  }, []);
-
-  const handleToggle = () => {
-    setAutoMode(!autoMode);
-    chrome.runtime.sendMessage({ action: autoMode ? "stop" : "start" });
-  };
 
   return (
     <div className="index-container">
@@ -57,6 +81,8 @@ const root = createRoot(document.getElementById("root")!);
 
 root.render(
   <React.StrictMode>
-    <Popup />
+    <ErrorBoundary>
+      <Popup />
+    </ErrorBoundary>
   </React.StrictMode>,
 );
