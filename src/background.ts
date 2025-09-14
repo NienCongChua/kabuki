@@ -10,10 +10,10 @@ console.log("🟢 [Background] Background script khởi động");
 // Lưu trạng thái timer và auto mode
 let timerState = {
   isRunning: false,
-  delay: 30,
+  delay: 60,
   startTime: 0,
   autoMode: false,
-  remainingTime: 30,
+  remainingTime: 60,
   currentTaskId: null as string | null,
   pausedTime: 0 // Thời gian đã pause
 };

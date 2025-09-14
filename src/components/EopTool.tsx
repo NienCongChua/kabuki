@@ -16,9 +16,9 @@ interface EopToolProps {
 }
 
 const EopTool: React.FC<EopToolProps> = ({ className }) => {
-  const [delay, setDelay] = useState(30);
+  const [delay, setDelay] = useState(60);
   const [isAutoMode, setIsAutoMode] = useState(false);
-  const [remainingTime, setRemainingTime] = useState(30);
+  const [remainingTime, setRemainingTime] = useState(60);
 
   // Đồng bộ với background script
   useEffect(() => {
