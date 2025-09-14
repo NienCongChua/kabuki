@@ -58,10 +58,10 @@ function sleepWithStateCheck(seconds: number): Promise<boolean> {
 // Biến lưu trạng thái timer
 let currentTimerState = {
   isRunning: false,
-  delay: 30,
+  delay: 60,
   startTime: 0,
   autoMode: false,
-  remainingTime: 30,
+  remainingTime: 60,
   currentTaskId: null as string | null,
   pausedTime: 0
 };
