@@ -41,7 +41,11 @@ chrome.tabs.onUpdated.addListener(function (_tabId, changeInfo, tab) {
       timerState.currentTaskId = id;
       // Reset về delay ban đầu khi chuyển task
       timerState.remainingTime = timerState.delay;
+      // Luôn reset startTime khi chuyển task để đảm bảo tính toán chính xác
       if (timerState.autoMode && timerState.isRunning) {
+        timerState.startTime = Date.now();
+      } else {
+        // Ngay cả khi không running, cũng cần set startTime để tính toán đúng
         timerState.startTime = Date.now();
       }
       saveTimerState();

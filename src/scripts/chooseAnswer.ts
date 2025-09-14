@@ -12,7 +12,10 @@ function calculateWaitTime(): number {
   }
 }
 
+const waitTime = calculateWaitTime();
+
 export const chooseAnswer = async (btnSubmit: HTMLElement) => {
+  await sleep(waitTime);
   const allQues = document.querySelectorAll<HTMLElement>(".ques");
   allQues.forEach((element) => {
     element.querySelectorAll<HTMLInputElement>("input")[0].checked = true;
@@ -22,8 +25,7 @@ export const chooseAnswer = async (btnSubmit: HTMLElement) => {
   const answerId = btnSubmit.id.toString().replace("submit", "answer");
   const btnAnswer = document.querySelector<HTMLElement>(`#${answerId}`);
   if (btnAnswer) {
-    const waitTime = calculateWaitTime();
-    await sleep(waitTime);
+    await sleep(3);
     btnAnswer.click();
     await sleep(2);
     const allRadios = document.querySelectorAll<HTMLInputElement>("input[type='radio']");

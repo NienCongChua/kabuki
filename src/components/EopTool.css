@@ -167,20 +167,6 @@
   }
 }
 
-.eop-timer:before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  height: 80px;
-  transform: translateY(-50%);
-  background: linear-gradient(90deg, rgba(161, 140, 252, 0.1) 0%, rgba(251, 194, 235, 0.2) 100%);
-  border-radius: 40px;
-  z-index: -1;
-  animation: breathe 3s infinite ease-in-out alternate;
-}
-
 @keyframes breathe {
   0% {
     opacity: 0.5;

@@ -5,6 +5,19 @@ import { vocabulary } from "./scripts/vocabulary";
 import { writeWord } from "./scripts/writeWord";
 import { sleep } from "./utils/sleep";
 
+// Tính toán thời gian còn lại chính xác từ timer state
+function calculateActualRemainingTime(): number {
+  if (!currentTimerState.isRunning || !currentTimerState.autoMode) {
+    return 0;
+  }
+
+  // Tính thời gian đã trôi qua từ khi start
+  const elapsed = Math.floor((Date.now() - currentTimerState.startTime) / 1000);
+  const remaining = Math.max(0, currentTimerState.delay - elapsed);
+
+  return remaining;
+}
+
 // Sleep với kiểm tra state mỗi 100ms
 function sleepWithStateCheck(seconds: number): Promise<boolean> {
   return new Promise((resolve) => {
@@ -59,12 +72,25 @@ async function onMutation(dtk: string) {
       return; // Chỉ chạy khi cả autoMode và isRunning đều true
     }
 
-    // Áp dụng remaining time với kiểm tra state liên tục
-    if (currentTimerState.remainingTime > 0) {
-      const success = await sleepWithStateCheck(currentTimerState.remainingTime);
+    // Tính toán thời gian chờ chính xác
+    const actualRemainingTime = calculateActualRemainingTime();
+    console.log("🕐 Timer State:", {
+      delay: currentTimerState.delay,
+      startTime: currentTimerState.startTime,
+      currentTime: Date.now(),
+      elapsed: Math.floor((Date.now() - currentTimerState.startTime) / 1000),
+      actualRemainingTime: actualRemainingTime
+    });
+
+    if (actualRemainingTime > 0) {
+      console.log("⏳ Extension sẽ chờ", actualRemainingTime, "giây nữa");
+      const success = await sleepWithStateCheck(actualRemainingTime);
       if (!success) {
+        console.log("❌ Bị dừng trong quá trình chờ");
         return; // Bị dừng trong quá trình đợi
       }
+    } else {
+      console.log("⚡ Thời gian đã hết, thực hiện ngay lập tức");
     }
 
     // Kiểm tra lại state trước khi thực hiện
